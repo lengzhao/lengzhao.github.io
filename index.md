@@ -1,8 +1,14 @@
-# 介绍
+---
+title: Lengzhao(郑桂庆)'s Blog
+---
+## 个人介绍
 
-只是一个测试
+1. 08年毕业于厦门大学
+2. 11年进入华为
+3. 19年自己全新设计/实现基于分片的区块链系统
+4. 21年进入Ambergroup
 
-<h1>Latest Posts</h1>
+## Latest Posts
 
 <ul>
   {% for post in site.posts %}
