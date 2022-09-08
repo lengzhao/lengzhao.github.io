@@ -2,6 +2,7 @@
 layout: post
 excerpt_separator: <!--more-->
 tags: grpc test json
+description: 这是我参考grpcurl，实现的一个方便测试grpc功能的程序，能够做到无代码测试。
 ---
 
 # grpc testtool

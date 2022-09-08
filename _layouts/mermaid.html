@@ -3,9 +3,19 @@ layout: default
 ---
 
 {% if page.mermaid == true %}
-<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/mermaid/8.6.0/mermaid.min.js"></script>
+
 <script>
-  mermaid.initialize({ startOnLoad: true });
+var config = {
+  startOnLoad: false,
+  theme: "default",
+  flowchart:{
+    useMaxWidth: true,
+    htmlLabels: false
+  }
+};
+mermaid.initialize(config);
+window.mermaid.init(undefined, document.querySelectorAll('.language-mermaid'));
 </script>
 {% endif %}
 

@@ -1,0 +1,20 @@
+---
+title: Tag Index
+layout: default
+---
+
+<div class="archive">
+{% assign sorted_tags = site.tags | sort %}
+{% for tag in sorted_tags %}
+
+<div class="archive-item">
+<h1 class="archive-year">{{ tag | first }}</h1>
+{% for post in tag[1] %}
+  <a href="{{ post.url | relative_url }}" class="archive-title fs-4">
+    {{ post.title }}
+  </a>
+{% endfor %}
+</div>
+
+{% endfor %}
+</div>
