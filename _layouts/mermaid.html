@@ -1,29 +1,25 @@
 ---
 layout: default
 ---
-<article class="post">
 
-  <header class="post-header">
-    <h1 class="post-title">{{ page.title | escape }}</h1>
-  </header>
+<div class="post">
+  <h1>{{ page.title }}</h1>
+  <span class="fs-4 text-muted">{{ page.date | date: "%b %d, %y" }}</span>
+  <div class="mt-4">{{ content }}</div>
+</div>
 
-  <div class="post-content">
-    {{ content }}
-  </div>
-  {% if page.mermaid == true %}
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.0.0/mermaid.min.js"></script>
-  <script>
-  var config = {
-      startOnLoad:true,
-      theme: 'forest',
-      flowchart:{
-              useMaxWidth:false,
-              htmlLabels:true
-          }
-  };
-  mermaid.initialize(config);
-  window.mermaid.init(undefined, document.querySelectorAll('.language-mermaid'));
-  </script>
-  {% endif %}
-  
-</article>
+{% if page.mermaid == true %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.0.0/mermaid.min.js"></script>
+<script>
+var config = {
+    startOnLoad:true,
+    theme: 'forest',
+    flowchart:{
+            useMaxWidth:false,
+            htmlLabels:true
+        }
+};
+mermaid.initialize(config);
+window.mermaid.init(undefined, document.querySelectorAll('.language-mermaid'));
+</script>
+{% endif %}
