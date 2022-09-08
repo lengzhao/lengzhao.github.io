@@ -2,22 +2,7 @@
 layout: default
 ---
 
-{% if page.mermaid == true %}
 <script src="//cdnjs.cloudflare.com/ajax/libs/mermaid/8.6.0/mermaid.min.js"></script>
-
-<script>
-var config = {
-  startOnLoad: false,
-  theme: "default",
-  flowchart:{
-    useMaxWidth: true,
-    htmlLabels: false
-  }
-};
-mermaid.initialize(config);
-window.mermaid.init(undefined, document.querySelectorAll('.language-mermaid'));
-</script>
-{% endif %}
 
 <div class="post">
   <h1>{{ page.title }}</h1>
@@ -25,3 +10,15 @@ window.mermaid.init(undefined, document.querySelectorAll('.language-mermaid'));
   <div class="mt-4">{{ content }}</div>
 </div>
 
+<script>
+var config = {
+  startOnLoad: false,
+  theme: "default",
+  flowchart:{
+    useMaxWidth: false,
+    htmlLabels: true
+  }
+};
+mermaid.initialize(config);
+window.mermaid.init(undefined, document.querySelectorAll('.language-mermaid'));
+</script>
