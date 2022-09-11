@@ -6,9 +6,9 @@ title: lengzhao-blog
 
 # Link to avatar in the navbar (/assets/images/avatar.png). Leave empty if no logo desired. Two avatars for light and dark mode.
 # Avatar for light mode site
-lightavatar: /assets/images/light_bauhaus_logo.png
+lightavatar: /assets/images/logo.png
 # Avatar for dark mode site
-darkavatar: /assets/images/dark_bauhaus_logo.png
+darkavatar: /assets/images/logo.png
 
 # A short description (e.g., A blog dedicated to reviewing cat gifs), used as part of the title tag like Ben's Awesome Site | A blog dedicated to reviewing cat gifs instead of Ben's Awesome Site | Long description about a blog dedicated to reviewing cat gifs that would be used when page.title is not defined.
 # tagline: Minimalistic Jekyll theme that automatically supports dark and light modes for blogs
@@ -29,7 +29,7 @@ baseurl: ""
 author: andrew-park
 
 # URL to a site-wide logo (e.g., /assets/your-company-logo.png)
-logo: /assets/images/light_bauhaus_logo.png
+logo: /assets/images/logo.png
 
 # Enter your Google Analytics web tracking code (e.g. UA-2110908-2) to activate tracking
 google_analytics:
@@ -41,8 +41,8 @@ footer-links:
   email: zgq_126@126.com
   # facebook:
   github: lengzhao
-  # instagram: andrewhwanpark
-  # linkedin: andrewhwanpark
+  # instagram: 
+  # linkedin: 
   rss: # just type anything here for a working RSS icon
   twitter: govm_net
 
