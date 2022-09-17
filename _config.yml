@@ -1,52 +1,105 @@
-# Name of your site (displayed in the navbar)
-name: lengzhao-blog
+# Site settings
+title: Lengzhao Blog
+SEOTitle: Lengzhao Blog
+header-img: img/post-bg-desk.jpg
+email: govm.net@gmail.com
+description: "Every failure is leading towards success."
+keyword: ""
+url: "http://lengzhao.github.io"          # your host, for absolute URL
+baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
+github_repo: "https://github.com/lengzhao/lengzhao.github.io.git" # you code repository
 
-# Your site's title (e.g., Ben's Awesome Site, The GitHub Blog, etc.), used as part of the title tag like Home | Ben's Awesome Site.
-title: lengzhao-blog
+# Sidebar settings
+sidebar: true                           # whether or not using Sidebar.
+sidebar-about-description: "Goals determine what you going to be!"
+sidebar-avatar: /img/avatar_m.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
-# Link to avatar in the navbar (/assets/images/avatar.png). Leave empty if no logo desired. Two avatars for light and dark mode.
-# Avatar for light mode site
-lightavatar: /assets/images/logo.png
-# Avatar for dark mode site
-darkavatar: /assets/images/logo.png
 
-# A short description (e.g., A blog dedicated to reviewing cat gifs), used as part of the title tag like Ben's Awesome Site | A blog dedicated to reviewing cat gifs instead of Ben's Awesome Site | Long description about a blog dedicated to reviewing cat gifs that would be used when page.title is not defined.
-# tagline: Minimalistic Jekyll theme that automatically supports dark and light modes for blogs
 
-# A longer description used for the description meta tag. Also used as fallback for pages that don't provide their own description, and also as part of the page's title tag if neither page.title nor site.tagline has been defined.
-# description: Minimalistic Jekyll theme that automatically supports dark and light modes for blogs
+# SNS settings
+RSS: false
+# weibo_username:     qiubaiying
+# zhihu_username:     
+github_username:    lengzhao
+# facebook_username:  
+# jianshu_username:   
+#twitter_username:   qiubaiying
 
-# The full URL to your site. Note: site.github.url will be used by default.
-url:
 
-# If you're hosting your site at a Project repository on GitHub pages
-# (http://yourusername.github.io/repository-name)
-# and NOT your User repository (http://yourusername.github.io)
-# then add in the baseurl here, like this: "/repository-name"
-baseurl: ""
 
-# global author information
-author: andrew-park
 
-# URL to a site-wide logo (e.g., /assets/your-company-logo.png)
-logo: /assets/images/logo.png
+# Build settings
+# from 2016, 'pygments' is unsupported on GitHub Pages. Use 'rouge' for highlighting instead.
+permalink: pretty
+paginate: 10
+exclude: ["less","node_modules","Gruntfile.js","package.json","README.md"]
+anchorjs: true                          # if you want to customize anchor. check out line:181 of `post.html`
 
-# Enter your Google Analytics web tracking code (e.g. UA-2110908-2) to activate tracking
-google_analytics:
 
-permalink: /:year/:month/:day/:title/
 
-# Includes an icon in the footer for each username you enter
-footer-links:
-  email: zgq_126@126.com
-  # facebook:
-  github: lengzhao
-  # instagram: 
-  # linkedin: 
-  rss: # just type anything here for a working RSS icon
-  twitter: govm_net
+# Gems
+# from PR#40, to support local preview for Jekyll 3.0
+gems: [jekyll-paginate]
 
-plugins:
-  - jekyll-seo-tag
-  - jekyll-sitemap
-  - jekyll-feed
+
+
+
+# Markdown settings
+# replace redcarpet to kramdown,
+# although redcarpet can auto highlight code, the lack of header-id make the catalog impossible, so I switch to kramdown
+# document: http://jekyllrb.com/docs/configuration/#kramdown
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  input: GFM                            # use Github Flavored Markdown !important
+
+
+
+# 评论系统
+# Disqus（https://disqus.com/）
+disqus_username: lengzhao
+
+# Gitalk
+# gitalk:
+#   enable: true    #是否开启Gitalk评论
+# #   clientID: f2c84e7629bb1446c1a4                            #生成的clientID
+# #   clientSecret: ca6d6139d1e1b8c43f8b2e19492ddcac8b322d0d    #生成的clientSecret
+#   repo: lengzhao.github.io    #仓库名称
+#   owner: lengzhao    #github用户名
+#   admin: lengzhao
+#   distractionFreeMode: true #是否启用类似FB的阴影遮罩
+
+
+# 统计
+
+# Analytics settings
+# Baidu Analytics
+ba_track_id: b50bf2b12b5338a1845e33832976fd68
+
+# Google Analytics
+# ga_track_id: 'UA-90855596-1'            # Format: UA-xxxxxx-xx
+# ga_domain: auto               # 默认的是 auto, 这里我是自定义了的域名，你如果没有自己的域名，需要改成auto
+
+
+
+
+
+# Featured Tags
+featured-tags: true                     # 是否使用首页标签
+featured-condition-size: 1              # 相同标签数量大于这个数，才会出现在首页
+
+
+
+# Progressive Web Apps
+chrome-tab-theme-color: "#000000"
+service-worker: true
+
+
+
+# Friends
+friends: [
+    # {
+    #     title: "WY",
+    #     href: "http://zhengwuyang.com"
+    # }
+]
