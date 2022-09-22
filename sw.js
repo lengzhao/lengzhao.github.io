@@ -6,7 +6,6 @@
  * Register service worker.
  * ========================================================== */
 
-const PRECACHE = 'precache-v1';
 const RUNTIME = 'runtime';
 const HOSTNAME_WHITELIST = [
   self.location.hostname,
@@ -67,25 +66,6 @@ const getRedirectUrl = (req) => {
   url.pathname += "/"
   return url.href
 }
-
-/**
- *  @Lifecycle Install
- *  Precache anything static to this version of your app.
- *  e.g. App Shell, 404, JS/CSS dependencies...
- *
- *  waitUntil() : installing ====> installed
- *  skipWaiting() : waiting(installed) ====> activating
- */
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(PRECACHE).then(cache => {
-      return cache.add('offline.html')
-      .then(self.skipWaiting())
-      .catch(err => console.log(err))
-    })
-  )
-});
-
 
 /**
  *  @Lifecycle Activate
