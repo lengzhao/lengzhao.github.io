@@ -8,24 +8,24 @@ subtitle: 区块链简单介绍。
 
 ## 入门
 
-区块链介绍：<https://academy.binance.com/zh/articles/what-is-blockchain-technology-a-comprehensive-guide-for-beginners>
-DeFi：<https://guide.defieye.io/>
-NFT： <https://www.defidaonews.com/article/6725374>
+* 区块链介绍：<https://academy.binance.com/zh/articles/what-is-blockchain-technology-a-comprehensive-guide-for-beginners>
+* DeFi：<https://guide.defieye.io/>
+* NFT： <https://www.defidaonews.com/article/6725374>
 
 **区块链当前主要是用于金融行业，其他的场景用的还是非常少。最大的问题就是基础设施还处于早期阶段，使用成本太高，难以满足大规模应用使用。**
 
 ## 开发者
 
-<https://www.ruanyifeng.com/blog/2017/12/blockchain-tutorial.html>
-<https://www.runoob.com/w3cnote/blockchain-intro.html>
-<https://zhuanlan.zhihu.com/p/33714491>
-区块链逻辑的故事版：<https://www.runoob.com/w3cnote/carton-blockchain-intro.html>
+* <https://www.ruanyifeng.com/blog/2017/12/blockchain-tutorial.html>
+* <https://www.runoob.com/w3cnote/blockchain-intro.html>
+* <https://zhuanlan.zhihu.com/p/33714491>
+* 区块链逻辑的故事版：<https://www.runoob.com/w3cnote/carton-blockchain-intro.html>
 
 ## 导航网站
 
-<https://pktoken.com/>
-<https://123eth.org/>
-<https://8btc6.com/>
+* <https://pktoken.com/>
+* <https://123eth.org/>
+* <https://8btc6.com/>
 
 ## 导览
 
