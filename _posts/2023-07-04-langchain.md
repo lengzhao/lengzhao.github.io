@@ -424,5 +424,6 @@ LangChain Agent中，内部是一套问题模板：
 ## 链接
 
 1. [官方文档](https://python.langchain.com/docs/get_started)
-2. [快速构建应用-来自知乎](https://zhuanlan.zhihu.com/p/625890521)
-3. [如何通过GPT问一本书的问题](https://juejin.cn/post/7215398854640386104)
+2. [中文文档](https://www.langchain.asia/)
+3. [快速构建应用-来自知乎](https://zhuanlan.zhihu.com/p/625890521)
+4. [如何通过GPT问一本书的问题](https://juejin.cn/post/7215398854640386104)
