@@ -35,3 +35,7 @@ Temporary Items
 # debug file
 _site
 .DS_Store
+
+.vscode
+
+temp/
