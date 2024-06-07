@@ -12,18 +12,6 @@
 
     {% include footer.html %}
 
-    {% if page.include_css %}
-        {% for css in page.include_css %}
-            <link href="{{ css }}" rel="stylesheet">
-        {% endfor %}
-    {% endif %}
-
-    {% if page.include_scripts %}
-        {% for include_script in page.include_scripts %}
-            <script type='text/javascript' src='{{ include_script }}'></script>
-        {% endfor %}
-    {% endif %}
-
 <!-- Image to hack wechat -->
 <img src="/img/apple-touch-icon.png" width="0" height="0" />
 <!-- Migrate from head to bottom, no longer block render and still work -->
