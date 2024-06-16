@@ -80,7 +80,7 @@ header-img: "img/tag-bg.jpg"
         try {
             var chainID = $('#chain-id').val();
             // Convert the chain ID to hexadecimal format
-            var hexChainId = chainID.toString(16);
+            var hexChainId = "0x"+chainID.toString(16);
             console.log("hexChainId:", hexChainId);
             await window.ethereum.request({
                 method: 'wallet_switchEthereumChain',
