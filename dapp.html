@@ -2,8 +2,21 @@
 title: DApp UI
 layout: default
 description: dynamic ui of dapp
-header-img: "img/tag-bg.jpg"
+header-img: "img/home-bg-o.jpg"
 ---
+
+<header class="intro-header" style="background-image: url('{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="site-heading" id="tag-heading">
+                    <h1>{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</h1>
+                    <span class="subheading">{{ page.description }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
 
 <div class="container mt-5">
     <h1 class="text-center">Smart Contract Interaction</h1>
@@ -34,7 +47,7 @@ header-img: "img/tag-bg.jpg"
         <button type="submit" class="btn btn-primary">Load Contract</button>
     </form>
     <div id="contract-functions" class="mt-5"></div>
-</div>
+
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -141,3 +154,4 @@ header-img: "img/tag-bg.jpg"
         });
     }
 </script>
+</div>
