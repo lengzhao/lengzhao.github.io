@@ -14,7 +14,20 @@
     <div class="container mt-5">
         <h1 class="text-center">Smart Contract Interaction</h1>
         <button id="connect-btn" class="btn btn-primary">Connect Wallet</button>
-        <p id="block-info"></p>
+        <div>
+            <p id="chain-info"></p>
+            <p id="block-info"></p>
+            <p id="account-info"></p>
+        </div>
+        
+        <a class="btn btn-primary mt-3" href="https://chainlist.org/">Add Network</a>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text">Chain ID</span>
+            <input type="number" class="form-control" aria-label="Enter chain ID" id="chain-id" value="1">
+            <button id="switch-net" class="btn btn-primary input-group-text">Switch Chain</button>
+        </div>
+
         <form id="contract-form" class="mt-4">
             <div class="form-group">
                 <label for="abi-file">ABI File</label>
@@ -50,12 +63,40 @@
             }
             try {
                 const accounts = await web3.eth.getAccounts();
+                $('#account-info').text(`Account: ${accounts[0]}`);
                 const blockNumber = await web3.eth.getBlockNumber();
+                $('#block-info').text(`Block Number: ${blockNumber}`);
                 const chainId = await web3.eth.getChainId();
-                $('#block-info').text(`Block Number: ${blockNumber}, chain id: ${chainId}, address: ${accounts[0]}`);
+                $('#chain-info').text(`chain id: ${chainId}`);
+                
             } catch (error) {
                 console.error('Error fetching block number:', error);
-                $('#block-number-info').text('Error fetching block number');
+                $('#block-info').text('Error fetching block number');
+            }
+        })
+
+
+        $('#switch-net').click(async function () {
+            try {
+                var chainID = $('#chain-id').val();
+                // Convert the chain ID to hexadecimal format
+                var hexChainId = chainID.toString(16);
+                console.log("hexChainId:", hexChainId);
+                await window.ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: hexChainId }],
+                });
+                console.log("You have succefully switched to Ethereum network")
+                const chainId = await web3.eth.getChainId();
+                console.log("name:", chainId);
+                $('#chain-info').text(chainId);
+            } catch (switchError) {
+                // This error code indicates that the chain has not been added to MetaMask.
+                if (switchError.code === 4902) {
+                    console.log("This network is not available in your metamask, please add it")
+                }
+                console.log("Failed to switch to the network", switchError)
+                $('#chain-info').text("Failed to switch to the network");
             }
         })
 
