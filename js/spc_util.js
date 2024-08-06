@@ -108,7 +108,7 @@ function createSPCPaymentRequest(spcData) {
   if (spcData.instrument === undefined)
     spcData.instrument = {};
   if (spcData.instrument.displayName === undefined)
-    spcData.instrument.displayName = 'Troy ···· 1234';
+    spcData.instrument.displayName = '0x9a170A0860F8B96F8B8ffBfADd000195Dd0512ae.mint';
   if (spcData.instrument.icon === undefined)
     spcData.instrument.icon = 'https://rsolomakhin.github.io/pr/spc/troy-alt-logo.png';
   if (spcData.timeout === undefined)
