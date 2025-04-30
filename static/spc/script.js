@@ -45,13 +45,16 @@ async function enrollCredential(credentialNumber) {
         const challenge = new Uint8Array(32);
         crypto.getRandomValues(challenge);
 
+        // Get hostname without port
+        const hostname = window.location.hostname;
+
         // Create credential options
         const credentialOptions = {
             publicKey: {
                 challenge: challenge,
                 rp: {
                     name: "SPC Demo",
-                    id: window.location.hostname
+                    id: hostname
                 },
                 user: {
                     id: new Uint8Array([credentialNumber]),
@@ -77,6 +80,8 @@ async function enrollCredential(credentialNumber) {
                 attestation: "none"
             }
         };
+
+        console.log("Enrollment options:", credentialOptions);
 
         // Create credential
         const credential = await navigator.credentials.create(credentialOptions);
@@ -105,6 +110,12 @@ async function enrollCredential(credentialNumber) {
     } catch (err) {
         console.error(err);
         alert(`Error enrolling credential #${credentialNumber}: ${err.message}`);
+        // Log detailed error information
+        console.log("Enrollment error details:", {
+            message: err.message,
+            name: err.name,
+            stack: err.stack
+        });
     }
 }
 
@@ -120,18 +131,23 @@ async function pay(credentialNumber) {
         const challenge = new Uint8Array(32);
         crypto.getRandomValues(challenge);
 
+        // Get hostname without port
+        const hostname = window.location.hostname;
+        const origin = window.location.origin;
+
         const paymentOptions = {
             challenge: challenge,
-            rpId: window.location.hostname,
+            rpId: hostname,
             credentialIds: [credential.rawId],
-            payeeOrigin: window.location.origin,
+            payeeOrigin: origin,
             instrument: {
                 displayName: "Test Card",
                 icon: "https://lengzhao.github.io/img/troy-card-art.png"
             },
-            timeout: 60000,
-            payeeOrigin: window.location.origin
+            timeout: 60000
         };
+
+        console.log("Payment options:", paymentOptions);
 
         // Request payment confirmation
         const result = await new PaymentRequest([{
@@ -161,6 +177,13 @@ async function pay(credentialNumber) {
     } catch (err) {
         console.error(err);
         alert(`Payment error: ${err.message}`);
+        // Log detailed error information
+        console.log("Credential:", credential);
+        console.log("Payment error details:", {
+            message: err.message,
+            name: err.name,
+            stack: err.stack
+        });
     }
 }
 
