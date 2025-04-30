@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Payment Confirmation Demo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Secure Payment Confirmation</h1>
+        <p>This is a test website. Nothing is charged.</p>
+
+        <div class="api-config">
+            <label for="apiUrl">API URL:</label>
+            <input type="text" id="apiUrl" value="http://localhost:8010/api" />
+        </div>
+
+        <div class="button-group">
+            <h2>Enrollment</h2>
+            <button onclick="enrollCredential(1)">Enroll Credential #1</button>
+            <button onclick="enrollCredential(2)">Enroll Credential #2</button>
+        </div>
+
+        <div class="button-group">
+            <h2>Authentication</h2>
+            <button onclick="login(1)">Login (with credential #1)</button>
+            <button onclick="login(2)">Login (with credential #2)</button>
+        </div>
+
+        <div class="button-group">
+            <h2>Payment</h2>
+            <button onclick="pay(1)">Pay $0.01 (with credential #1)</button>
+            <button onclick="pay(2)">Pay $0.01 (with credential #2)</button>
+        </div>
+
+        <div id="result" class="result"></div>
+
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
