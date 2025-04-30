@@ -58,10 +58,16 @@ async function enrollCredential(credentialNumber) {
                     name: `user${credentialNumber}@example.com`,
                     displayName: `User ${credentialNumber}`
                 },
-                pubKeyCredParams: [{
-                    type: "public-key",
-                    alg: -7 // ES256
-                }],
+                pubKeyCredParams: [
+                    {
+                        type: "public-key",
+                        alg: -7  // ES256
+                    },
+                    {
+                        type: "public-key",
+                        alg: -257 // RS256
+                    }
+                ],
                 authenticatorSelection: {
                     authenticatorAttachment: "platform",
                     requireResidentKey: false,
@@ -116,13 +122,15 @@ async function pay(credentialNumber) {
 
         const paymentOptions = {
             challenge: challenge,
+            rpId: window.location.hostname,
+            credentialIds: [credential.rawId],
             payeeOrigin: window.location.origin,
             instrument: {
                 displayName: "Test Card",
                 icon: "https://example.com/card-icon.png"
             },
-            paymentOptions: ["secure-payment-confirmation"],
-            timeout: 60000
+            timeout: 60000,
+            payeeOrigin: window.location.origin
         };
 
         // Request payment confirmation
