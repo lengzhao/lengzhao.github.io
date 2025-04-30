@@ -127,7 +127,7 @@ async function pay(credentialNumber) {
             payeeOrigin: window.location.origin,
             instrument: {
                 displayName: "Test Card",
-                icon: "/img/troy-card-art.png"
+                icon: "https://lengzhao.github.io/img/troy-card-art.png"
             },
             timeout: 60000,
             payeeOrigin: window.location.origin
