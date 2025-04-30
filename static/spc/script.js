@@ -143,8 +143,7 @@ async function pay(credentialNumber) {
             instrument: {
                 displayName: "Test Card",
                 icon: "https://lengzhao.github.io/img/troy-card-art.png"
-            },
-            timeout: 60000
+            }
         };
 
         console.log("Payment options:", paymentOptions);
