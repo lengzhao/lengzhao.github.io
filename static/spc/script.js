@@ -8,19 +8,11 @@ function getApiUrl() {
 
 // Helper function to get effective domain
 function getEffectiveDomain() {
-    // 如果是本地开发环境，使用 localhost
-    if (window.location.hostname === 'localhost' || window.location.hostname.startsWith('127.0.')) {
-        return 'localhost';
-    }
     return window.location.hostname;
 }
 
 // Helper function to get effective origin
 function getEffectiveOrigin() {
-    // 如果是本地开发环境，使用 http://localhost
-    if (window.location.hostname === 'localhost' || window.location.hostname.startsWith('127.0.')) {
-        return 'http://localhost';
-    }
     return window.location.origin;
 }
 
@@ -32,6 +24,9 @@ function displayResult(result) {
 
 // Helper function to send data to API
 async function sendToApi(endpoint, data) {
+    if (true) {
+        return;
+    }
     const apiUrl = getApiUrl();
     try {
         const response = await fetch(`${apiUrl}/${endpoint}`, {
@@ -93,44 +88,29 @@ async function enrollCredential(credentialNumber) {
                     userVerification: "required"
                 },
                 timeout: 60000,
-                attestation: "none"
+                attestation: "none",
+                extensions: {
+                    payment: {
+                        isPayment: true
+                    }
+                }
             }
         };
 
         console.log("Enrollment options:", credentialOptions);
-
         const credential = await navigator.credentials.create(credentialOptions);
         
         // Store credential
         credentials.set(credentialNumber, credential);
+        window.localStorage.setItem('credential' + credentialNumber, 
+            btoa(String.fromCharCode(...new Uint8Array(credential.rawId))));
         
-        // Convert ArrayBuffer to Base64 for transmission
-        const credentialData = {
-            id: credential.id,
-            rawId: btoa(String.fromCharCode(...new Uint8Array(credential.rawId))),
-            type: credential.type,
-            response: {
-                attestationObject: btoa(String.fromCharCode(...new Uint8Array(credential.response.attestationObject))),
-                clientDataJSON: btoa(String.fromCharCode(...new Uint8Array(credential.response.clientDataJSON)))
-            }
-        };
-
-        // Send to API
-        await sendToApi('enroll', {
-            credentialNumber,
-            credential: credentialData
-        });
-
-        alert(`Successfully enrolled credential #${credentialNumber}`);
+        console.log("Credential stored:", credential);
+        displayResult({ status: 'success', credential: credential });
     } catch (err) {
         console.error("Enrollment error:", err);
         alert(`Error enrolling credential #${credentialNumber}: ${err.message}`);
-        // Log detailed error information
-        console.log("Enrollment error details:", {
-            message: err.message,
-            name: err.name,
-            stack: err.stack
-        });
+        displayResult({ error: err.message });
     }
 }
 
@@ -138,8 +118,8 @@ async function enrollCredential(credentialNumber) {
 async function pay(credentialNumber) {
     let storedCredential;
     try {
-        storedCredential = credentials.get(credentialNumber);
-        if (!storedCredential) {
+        const credentialId = window.localStorage.getItem('credential' + credentialNumber);
+        if (!credentialId) {
             throw new Error(`Credential #${credentialNumber} not found. Please enroll first.`);
         }
 
@@ -151,16 +131,15 @@ async function pay(credentialNumber) {
 
         console.log("Payment domain:", effectiveDomain);
         console.log("Payment origin:", effectiveOrigin);
-        console.log("Stored credential:", storedCredential);
 
         const paymentOptions = {
             challenge: challenge,
             rpId: effectiveDomain,
-            credentialIds: [storedCredential.rawId],
+            credentialIds: [Uint8Array.from(atob(credentialId), c => c.charCodeAt(0))],
             payeeOrigin: effectiveOrigin,
             instrument: {
                 displayName: "Test Card",
-                icon: effectiveOrigin + "/img/troy-card-art.png"
+                icon: "https://rsolomakhin.github.io/pr/spc/troy-alt-logo.png"
             },
             timeout: 60000,
             userVerification: "required"
@@ -180,43 +159,24 @@ async function pay(credentialNumber) {
 
         console.log("Payment request created:", request);
         const result = await request.show();
-
-        // Convert payment response data for transmission
-        const paymentData = {
-            details: result.details,
-            methodName: result.methodName
-        };
-
-        // Send to API
-        await sendToApi('pay', {
-            credentialNumber,
-            payment: paymentData
-        });
-
         await result.complete("success");
-        alert("Payment successful!");
+        console.log("Payment result:", result);
+        displayResult({ status: 'success', payment: result });
     } catch (err) {
         console.error(err);
         alert(`Payment error: ${err.message}`);
-        // Log detailed error information
-        console.log("Payment error details:", {
-            message: err.message,
-            name: err.name,
-            stack: err.stack,
-            storedCredential: storedCredential
-        });
+        displayResult({ error: err.message });
     }
 }
 
 // Login function
 async function login(credentialNumber) {
     try {
-        const credential = credentials.get(credentialNumber);
-        if (!credential) {
+        const credentialId = window.localStorage.getItem('credential' + credentialNumber);
+        if (!credentialId) {
             throw new Error(`Credential #${credentialNumber} not found. Please enroll first.`);
         }
 
-        // Generate random challenge
         const challenge = new Uint8Array(32);
         crypto.getRandomValues(challenge);
 
@@ -224,7 +184,7 @@ async function login(credentialNumber) {
             publicKey: {
                 challenge: challenge,
                 allowCredentials: [{
-                    id: credential.rawId,
+                    id: Uint8Array.from(atob(credentialId), c => c.charCodeAt(0)),
                     type: 'public-key',
                 }],
                 timeout: 60000,
@@ -232,32 +192,14 @@ async function login(credentialNumber) {
             }
         };
 
-        // Get assertion
         const assertion = await navigator.credentials.get(assertionOptions);
-
-        // Convert assertion data for transmission
-        const assertionData = {
-            id: assertion.id,
-            rawId: btoa(String.fromCharCode(...new Uint8Array(assertion.rawId))),
-            type: assertion.type,
-            response: {
-                authenticatorData: btoa(String.fromCharCode(...new Uint8Array(assertion.response.authenticatorData))),
-                clientDataJSON: btoa(String.fromCharCode(...new Uint8Array(assertion.response.clientDataJSON))),
-                signature: btoa(String.fromCharCode(...new Uint8Array(assertion.response.signature))),
-                userHandle: assertion.response.userHandle ? btoa(String.fromCharCode(...new Uint8Array(assertion.response.userHandle))) : null
-            }
-        };
-
-        // Send to API
-        await sendToApi('login', {
-            credentialNumber,
-            assertion: assertionData
-        });
-
+        console.log("Login result:", assertion);
+        displayResult({ status: 'success', login: assertion });
         alert(`Successfully authenticated with credential #${credentialNumber}`);
     } catch (err) {
         console.error(err);
         alert(`Login error: ${err.message}`);
+        displayResult({ error: err.message });
     }
 }
 
@@ -265,4 +207,14 @@ async function login(credentialNumber) {
 if (!window.PublicKeyCredential) {
     alert("Warning: Your browser does not support WebAuthn!");
     document.querySelectorAll('button').forEach(button => button.disabled = true);
+} else {
+    if (PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable) {
+        PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()
+            .then((available) => {
+                console.log("Platform authenticator available:", available);
+            })
+            .catch((err) => {
+                console.error("Error checking platform authenticator:", err);
+            });
+    }
 } 
