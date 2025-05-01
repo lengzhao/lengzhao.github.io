@@ -140,7 +140,7 @@ async function pay(credentialNumber) {
             payeeOrigin: effectiveOrigin,
             instrument: {
                 displayName: "Test Card",
-                icon: "https://rsolomakhin.github.io/pr/spc/troy-alt-logo.png"
+                icon: "https://lengzhao.github.io/img/troy-card-art.png"
             },
             timeout: 60000,
             userVerification: "required"
