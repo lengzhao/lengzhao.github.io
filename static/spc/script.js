@@ -84,7 +84,8 @@ async function enrollCredential(credentialNumber) {
                 ],
                 authenticatorSelection: {
                     authenticatorAttachment: "platform",
-                    requireResidentKey: false,
+                    residentKey: "preferred",
+                    requireResidentKey: true,
                     userVerification: "required"
                 },
                 timeout: 60000,
