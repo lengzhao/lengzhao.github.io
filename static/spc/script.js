@@ -136,6 +136,11 @@ async function pay(credentialNumber) {
         const hostname = window.location.hostname;
         const origin = window.location.origin;
 
+        // 调试信息
+        console.log("Current hostname:", hostname);
+        console.log("Current origin:", origin);
+        console.log("Stored credential:", storedCredential);
+
         const paymentOptions = {
             challenge: challenge,
             rpId: hostname,
@@ -143,7 +148,7 @@ async function pay(credentialNumber) {
             payeeOrigin: origin,
             instrument: {
                 displayName: "Test Card",
-                icon: "https://lengzhao.github.io/img/troy-card-art.png"
+                icon: origin + "/img/troy-card-art.png"
             },
             timeout: 60000,
             userVerification: "required"
@@ -152,7 +157,7 @@ async function pay(credentialNumber) {
         console.log("Payment options:", paymentOptions);
 
         // Request payment confirmation
-        const result = await new PaymentRequest([{
+        const request = new PaymentRequest([{
             supportedMethods: "secure-payment-confirmation",
             data: paymentOptions
         }], {
@@ -160,7 +165,10 @@ async function pay(credentialNumber) {
                 label: "Total",
                 amount: { currency: "USD", value: "0.01" }
             }
-        }).show();
+        });
+
+        console.log("Payment request created:", request);
+        const result = await request.show();
 
         // Convert payment response data for transmission
         const paymentData = {
