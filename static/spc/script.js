@@ -6,6 +6,24 @@ function getApiUrl() {
     return document.getElementById('apiUrl').value;
 }
 
+// Helper function to get effective domain
+function getEffectiveDomain() {
+    // 如果是本地开发环境，使用 localhost
+    if (window.location.hostname === 'localhost' || window.location.hostname.startsWith('127.0.')) {
+        return 'localhost';
+    }
+    return window.location.hostname;
+}
+
+// Helper function to get effective origin
+function getEffectiveOrigin() {
+    // 如果是本地开发环境，使用 http://localhost
+    if (window.location.hostname === 'localhost' || window.location.hostname.startsWith('127.0.')) {
+        return 'http://localhost';
+    }
+    return window.location.origin;
+}
+
 // Helper function to display results
 function displayResult(result) {
     const resultDiv = document.getElementById('result');
@@ -41,20 +59,18 @@ async function sendToApi(endpoint, data) {
 // Enrollment function
 async function enrollCredential(credentialNumber) {
     try {
-        // Generate random challenge
         const challenge = new Uint8Array(32);
         crypto.getRandomValues(challenge);
 
-        // Get hostname without port
-        const hostname = window.location.hostname;
+        const effectiveDomain = getEffectiveDomain();
+        console.log("Enrolling with domain:", effectiveDomain);
 
-        // Create credential options
         const credentialOptions = {
             publicKey: {
                 challenge: challenge,
                 rp: {
                     name: "SPC Demo",
-                    id: hostname
+                    id: effectiveDomain
                 },
                 user: {
                     id: new Uint8Array([credentialNumber]),
@@ -83,7 +99,6 @@ async function enrollCredential(credentialNumber) {
 
         console.log("Enrollment options:", credentialOptions);
 
-        // Create credential
         const credential = await navigator.credentials.create(credentialOptions);
         
         // Store credential
@@ -108,7 +123,7 @@ async function enrollCredential(credentialNumber) {
 
         alert(`Successfully enrolled credential #${credentialNumber}`);
     } catch (err) {
-        console.error(err);
+        console.error("Enrollment error:", err);
         alert(`Error enrolling credential #${credentialNumber}: ${err.message}`);
         // Log detailed error information
         console.log("Enrollment error details:", {
@@ -128,27 +143,24 @@ async function pay(credentialNumber) {
             throw new Error(`Credential #${credentialNumber} not found. Please enroll first.`);
         }
 
-        // Generate random challenge
         const challenge = new Uint8Array(32);
         crypto.getRandomValues(challenge);
 
-        // Get hostname without port
-        const hostname = window.location.hostname;
-        const origin = window.location.origin;
+        const effectiveDomain = getEffectiveDomain();
+        const effectiveOrigin = getEffectiveOrigin();
 
-        // 调试信息
-        console.log("Current hostname:", hostname);
-        console.log("Current origin:", origin);
+        console.log("Payment domain:", effectiveDomain);
+        console.log("Payment origin:", effectiveOrigin);
         console.log("Stored credential:", storedCredential);
 
         const paymentOptions = {
             challenge: challenge,
-            rpId: hostname,
+            rpId: effectiveDomain,
             credentialIds: [storedCredential.rawId],
-            payeeOrigin: origin,
+            payeeOrigin: effectiveOrigin,
             instrument: {
                 displayName: "Test Card",
-                icon: origin + "/img/troy-card-art.png"
+                icon: effectiveOrigin + "/img/troy-card-art.png"
             },
             timeout: 60000,
             userVerification: "required"
@@ -156,7 +168,6 @@ async function pay(credentialNumber) {
 
         console.log("Payment options:", paymentOptions);
 
-        // Request payment confirmation
         const request = new PaymentRequest([{
             supportedMethods: "secure-payment-confirmation",
             data: paymentOptions
