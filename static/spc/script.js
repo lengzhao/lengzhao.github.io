@@ -121,9 +121,10 @@ async function enrollCredential(credentialNumber) {
 
 // Payment function
 async function pay(credentialNumber) {
+    let storedCredential;
     try {
-        const credential = credentials.get(credentialNumber);
-        if (!credential) {
+        storedCredential = credentials.get(credentialNumber);
+        if (!storedCredential) {
             throw new Error(`Credential #${credentialNumber} not found. Please enroll first.`);
         }
 
@@ -138,12 +139,14 @@ async function pay(credentialNumber) {
         const paymentOptions = {
             challenge: challenge,
             rpId: hostname,
-            credentialIds: [credential.rawId],
+            credentialIds: [storedCredential.rawId],
             payeeOrigin: origin,
             instrument: {
                 displayName: "Test Card",
                 icon: "https://lengzhao.github.io/img/troy-card-art.png"
-            }
+            },
+            timeout: 60000,
+            userVerification: "required"
         };
 
         console.log("Payment options:", paymentOptions);
@@ -177,11 +180,11 @@ async function pay(credentialNumber) {
         console.error(err);
         alert(`Payment error: ${err.message}`);
         // Log detailed error information
-        console.log("Credential:", credential);
         console.log("Payment error details:", {
             message: err.message,
             name: err.name,
-            stack: err.stack
+            stack: err.stack,
+            storedCredential: storedCredential
         });
     }
 }
