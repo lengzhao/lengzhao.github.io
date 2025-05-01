@@ -24,9 +24,6 @@ function displayResult(result) {
 
 // Helper function to send data to API
 async function sendToApi(endpoint, data) {
-    if (true) {
-        return;
-    }
     const apiUrl = getApiUrl();
     try {
         const response = await fetch(`${apiUrl}/${endpoint}`, {
@@ -108,6 +105,14 @@ async function enrollCredential(credentialNumber) {
         
         console.log("Credential stored:", credential);
         displayResult({ status: 'success', credential: credential });
+
+        // Send to API
+        await sendToApi('enroll', {
+            credentialNumber,
+            credential: credential
+        });
+        
+        alert(`Successfully enrolled credential #${credentialNumber}`);
     } catch (err) {
         console.error("Enrollment error:", err);
         alert(`Error enrolling credential #${credentialNumber}: ${err.message}`);
@@ -163,6 +168,14 @@ async function pay(credentialNumber) {
         await result.complete("success");
         console.log("Payment result:", result);
         displayResult({ status: 'success', payment: result });
+
+        // Send to API
+        await sendToApi('pay', {
+            credentialNumber,
+            payment: result
+        });
+        
+        alert("Payment successful!");
     } catch (err) {
         console.error(err);
         alert(`Payment error: ${err.message}`);
@@ -196,6 +209,13 @@ async function login(credentialNumber) {
         const assertion = await navigator.credentials.get(assertionOptions);
         console.log("Login result:", assertion);
         displayResult({ status: 'success', login: assertion });
+
+        // Send to API
+        await sendToApi('login', {
+            credentialNumber,
+            login: assertion
+        });
+        
         alert(`Successfully authenticated with credential #${credentialNumber}`);
     } catch (err) {
         console.error(err);
