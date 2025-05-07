@@ -108,6 +108,7 @@ async function enrollCredential(credentialNumber) {
         // Send to API
         await sendToApi('enroll', {
             credentialNumber,
+            credentialOptions: credentialOptions,
             credential: credential
         });
         
@@ -171,6 +172,13 @@ async function pay(credentialNumber) {
         // Send to API
         await sendToApi('pay', {
             credentialNumber,
+            paymentOptions:paymentOptions,
+            details: {
+                total: {
+                    label: "Total",
+                    amount: { currency: "USD", value: "0.01" }
+                }
+            },
             payment: result
         });
         
@@ -212,6 +220,7 @@ async function login(credentialNumber) {
         // Send to API
         await sendToApi('login', {
             credentialNumber,
+            assertionOptions:assertionOptions,
             login: assertion
         });
         
