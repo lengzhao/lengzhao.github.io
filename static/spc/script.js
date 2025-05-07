@@ -44,7 +44,6 @@ async function sendToApi(endpoint, data) {
     } catch (err) {
         console.error(err);
         displayResult({ error: err.message });
-        throw err;
     }
 }
 
