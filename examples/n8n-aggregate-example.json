@@ -1,0 +1,257 @@
+{
+  "name": "数据聚合汇总工作流",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "main-trigger",
+      "name": "主触发器",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 400]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "数据源",
+              "value": "销售数据"
+            }
+          ],
+          "number": [
+            {
+              "name": "Q1销售额",
+              "value": 150000
+            },
+            {
+              "name": "Q2销售额", 
+              "value": 180000
+            },
+            {
+              "name": "Q3销售额",
+              "value": 165000
+            },
+            {
+              "name": "Q4销售额",
+              "value": 200000
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "sales-data",
+      "name": "销售数据源",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "数据源",
+              "value": "成本数据"
+            }
+          ],
+          "number": [
+            {
+              "name": "Q1成本",
+              "value": 90000
+            },
+            {
+              "name": "Q2成本",
+              "value": 110000
+            },
+            {
+              "name": "Q3成本",
+              "value": 95000
+            },
+            {
+              "name": "Q4成本",
+              "value": 120000
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "cost-data",
+      "name": "成本数据源",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [460, 500]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "id": "merge-data",
+      "name": "合并数据源",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [680, 400]
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "Q1销售额,Q2销售额,Q3销售额,Q4销售额",
+              "operation": "sum",
+              "outputFieldName": "年度总销售额"
+            },
+            {
+              "fieldToAggregate": "Q1成本,Q2成本,Q3成本,Q4成本", 
+              "operation": "sum",
+              "outputFieldName": "年度总成本"
+            },
+            {
+              "fieldToAggregate": "Q1销售额,Q2销售额,Q3销售额,Q4销售额",
+              "operation": "average",
+              "outputFieldName": "季度平均销售额"
+            },
+            {
+              "fieldToAggregate": "Q1销售额,Q2销售额,Q3销售额,Q4销售额",
+              "operation": "max",
+              "outputFieldName": "最高季度销售额"
+            },
+            {
+              "fieldToAggregate": "Q1销售额,Q2销售额,Q3销售额,Q4销售额",
+              "operation": "min",
+              "outputFieldName": "最低季度销售额"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "aggregate-data",
+      "name": "数据聚合计算",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [900, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 计算派生指标\nconst data = $input.first().json;\n\n// 计算利润相关指标\nconst totalProfit = data.年度总销售额 - data.年度总成本;\nconst profitMargin = (totalProfit / data.年度总销售额 * 100).toFixed(2);\n\n// 计算季度数据\nconst quarters = [\n  { name: 'Q1', sales: data.Q1销售额 || 0, cost: data.Q1成本 || 0 },\n  { name: 'Q2', sales: data.Q2销售额 || 0, cost: data.Q2成本 || 0 },\n  { name: 'Q3', sales: data.Q3销售额 || 0, cost: data.Q3成本 || 0 },\n  { name: 'Q4', sales: data.Q4销售额 || 0, cost: data.Q4成本 || 0 }\n];\n\n// 找出最佳和最差季度\nconst quarterlyProfits = quarters.map(q => ({\n  ...q,\n  profit: q.sales - q.cost,\n  margin: ((q.sales - q.cost) / q.sales * 100).toFixed(2)\n}));\n\nconst bestQuarter = quarterlyProfits.reduce((best, current) => \n  current.profit > best.profit ? current : best\n);\n\nconst worstQuarter = quarterlyProfits.reduce((worst, current) => \n  current.profit < worst.profit ? current : worst\n);\n\nreturn [{\n  json: {\n    // 原始聚合数据\n    ...data,\n    // 计算的派生指标\n    年度总利润: totalProfit,\n    利润率: `${profitMargin}%`,\n    最佳季度: `${bestQuarter.name} (利润: ${bestQuarter.profit})`,\n    最差季度: `${worstQuarter.name} (利润: ${worstQuarter.profit})`,\n    季度分析: quarterlyProfits,\n    // 汇总报告\n    报告生成时间: new Date().toISOString(),\n    数据完整性: '100%'\n  }\n}];"
+      },
+      "id": "calculate-metrics",
+      "name": "计算业务指标",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 400]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "报告标题",
+              "value": "年度财务汇总报告"
+            },
+            {
+              "name": "汇总信息",
+              "value": "=总销售额: {{ $json.年度总销售额 }} | 总成本: {{ $json.年度总成本 }} | 净利润: {{ $json.年度总利润 }} | 利润率: {{ $json.利润率 }}"
+            },
+            {
+              "name": "关键发现",
+              "value": "=最佳季度: {{ $json.最佳季度 }} | 最差季度: {{ $json.最差季度 }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "format-report",
+      "name": "格式化最终报告",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [1340, 400]
+    }
+  ],
+  "connections": {
+    "主触发器": {
+      "main": [
+        [
+          {
+            "node": "销售数据源",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "成本数据源",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "销售数据源": {
+      "main": [
+        [
+          {
+            "node": "合并数据源",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "成本数据源": {
+      "main": [
+        [
+          {
+            "node": "合并数据源",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "合并数据源": {
+      "main": [
+        [
+          {
+            "node": "数据聚合计算",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "数据聚合计算": {
+      "main": [
+        [
+          {
+            "node": "计算业务指标",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "计算业务指标": {
+      "main": [
+        [
+          {
+            "node": "格式化最终报告",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2024-12-17T10:30:00.000Z",
+  "updatedAt": "2024-12-17T10:30:00.000Z",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "description": "演示多数据源聚合、合并和业务指标计算的完整工作流"
+  },
+  "pinData": {},
+  "versionId": "aggregate-example-v1"
+} 

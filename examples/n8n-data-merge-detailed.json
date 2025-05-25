@@ -1,0 +1,263 @@
+{
+  "name": "数据合并详细示例",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trigger-1",
+      "name": "开始触发",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 400]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "数据类型",
+              "value": "用户基础信息"
+            }
+          ],
+          "json": [
+            {
+              "name": "用户数据",
+              "value": "[\n  {\"id\": 1, \"name\": \"张三\", \"department\": \"技术部\"},\n  {\"id\": 2, \"name\": \"李四\", \"department\": \"销售部\"},\n  {\"id\": 3, \"name\": \"王五\", \"department\": \"市场部\"}\n]"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "user-data-source",
+      "name": "用户基础数据",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "数据类型",
+              "value": "薪资信息"
+            }
+          ],
+          "json": [
+            {
+              "name": "薪资数据",
+              "value": "[\n  {\"user_id\": 1, \"salary\": 15000, \"bonus\": 3000},\n  {\"user_id\": 2, \"salary\": 12000, \"bonus\": 2500},\n  {\"user_id\": 3, \"salary\": 13000, \"bonus\": 2800}\n]"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "salary-data-source", 
+      "name": "薪资数据",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [460, 500]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 展开用户基础数据\nconst userData = JSON.parse($input.first().json.用户数据);\nreturn userData.map(user => ({\n  json: {\n    ...user,\n    数据来源: '用户基础信息'\n  }\n}));"
+      },
+      "id": "expand-user-data",
+      "name": "展开用户数据",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 展开薪资数据\nconst salaryData = JSON.parse($input.first().json.薪资数据);\nreturn salaryData.map(salary => ({\n  json: {\n    ...salary,\n    数据来源: '薪资信息'\n  }\n}));"
+      },
+      "id": "expand-salary-data",
+      "name": "展开薪资数据", 
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 500]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "id": "merge-combine-all",
+      "name": "组合所有数据",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [900, 400]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "id": "merge-by-position",
+      "name": "按位置合并",
+      "type": "n8n-nodes-base.merge", 
+      "typeVersion": 3,
+      "position": [900, 600]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 手动关联合并用户和薪资数据\nconst allItems = $input.all();\n\n// 分离用户数据和薪资数据\nconst userData = allItems.filter(item => item.json.数据来源 === '用户基础信息');\nconst salaryData = allItems.filter(item => item.json.数据来源 === '薪资信息');\n\n// 根据ID关联合并\nconst mergedData = userData.map(userItem => {\n  const user = userItem.json;\n  const salary = salaryData.find(salaryItem => \n    salaryItem.json.user_id === user.id\n  )?.json;\n  \n  return {\n    json: {\n      // 用户基础信息\n      id: user.id,\n      name: user.name,\n      department: user.department,\n      // 薪资信息\n      salary: salary?.salary || 0,\n      bonus: salary?.bonus || 0,\n      // 计算字段\n      total_compensation: (salary?.salary || 0) + (salary?.bonus || 0),\n      // 元数据\n      合并时间: new Date().toISOString(),\n      数据完整性: salary ? '完整' : '缺失薪资数据'\n    }\n  };\n});\n\nreturn mergedData;"
+      },
+      "id": "manual-join",
+      "name": "手动关联合并",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 按位置合并的数据处理\nconst items = $input.all();\n\n// 假设前一半是用户数据，后一半是薪资数据\nconst halfLength = Math.floor(items.length / 2);\nconst userData = items.slice(0, halfLength);\nconst salaryData = items.slice(halfLength);\n\n// 按位置配对\nconst pairedData = userData.map((userItem, index) => {\n  const user = userItem.json;\n  const salary = salaryData[index]?.json || {};\n  \n  return {\n    json: {\n      配对索引: index,\n      用户信息: user,\n      薪资信息: salary,\n      合并方式: '按位置配对'\n    }\n  };\n});\n\nreturn pairedData;"
+      },
+      "id": "process-position-merge",
+      "name": "处理位置合并",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 600]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "处理结果",
+              "value": "=关联合并完成，共处理 {{ $json.length || 0 }} 条记录"
+            },
+            {
+              "name": "示例数据",
+              "value": "=用户: {{ $json[0]?.name || 'N/A' }}，薪资: {{ $json[0]?.total_compensation || 'N/A' }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "format-join-result",
+      "name": "格式化关联结果",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [1340, 400]
+    }
+  ],
+  "connections": {
+    "开始触发": {
+      "main": [
+        [
+          {
+            "node": "用户基础数据",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "薪资数据",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "用户基础数据": {
+      "main": [
+        [
+          {
+            "node": "展开用户数据",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "薪资数据": {
+      "main": [
+        [
+          {
+            "node": "展开薪资数据",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "展开用户数据": {
+      "main": [
+        [
+          {
+            "node": "组合所有数据",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "按位置合并",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "展开薪资数据": {
+      "main": [
+        [
+          {
+            "node": "组合所有数据",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "按位置合并",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "组合所有数据": {
+      "main": [
+        [
+          {
+            "node": "手动关联合并",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "按位置合并": {
+      "main": [
+        [
+          {
+            "node": "处理位置合并",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "手动关联合并": {
+      "main": [
+        [
+          {
+            "node": "格式化关联结果",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2024-12-17T11:00:00.000Z",
+  "updatedAt": "2024-12-17T11:00:00.000Z",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "description": "演示n8n中不同数据合并策略的详细配置示例"
+  },
+  "pinData": {},
+  "versionId": "data-merge-detailed-v1"
+} 

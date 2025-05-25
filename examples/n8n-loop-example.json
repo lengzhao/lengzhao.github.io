@@ -1,0 +1,159 @@
+{
+  "name": "批量数据处理循环",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trigger-node-id",
+      "name": "开始触发",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "用户列表",
+              "value": "[\n  {\"id\": 1, \"name\": \"张三\", \"email\": \"zhang@example.com\"},\n  {\"id\": 2, \"name\": \"李四\", \"email\": \"li@example.com\"},\n  {\"id\": 3, \"name\": \"王五\", \"email\": \"wang@example.com\"},\n  {\"id\": 4, \"name\": \"赵六\", \"email\": \"zhao@example.com\"}\n]"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "data-source-id",
+      "name": "准备数据",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 将JSON字符串转换为数组\nconst userListStr = $input.first().json.用户列表;\nconst userList = JSON.parse(userListStr);\n\n// 为每个用户创建一个数据项\nreturn userList.map(user => ({\n  json: {\n    id: user.id,\n    name: user.name,\n    email: user.email,\n    status: '待处理'\n  }\n}));"
+      },
+      "id": "convert-data-id",
+      "name": "转换数据格式",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "batchSize": 2,
+        "options": {}
+      },
+      "id": "split-batch-id",
+      "name": "分批处理",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 模拟处理每个用户的逻辑\nconst items = $input.all();\n\nreturn items.map(item => {\n  const user = item.json;\n  \n  // 模拟一些处理逻辑\n  const processedData = {\n    ...user,\n    status: '已处理',\n    processedAt: new Date().toISOString(),\n    // 模拟根据用户ID计算一些值\n    score: user.id * 10 + Math.floor(Math.random() * 100)\n  };\n  \n  return {\n    json: processedData\n  };\n});"
+      },
+      "id": "process-batch-id",
+      "name": "处理单批数据",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "批次信息",
+              "value": "=批次 {{ $json.batch }} 处理完成，用户：{{ $json.name }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "log-batch-id",
+      "name": "记录处理日志",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [1340, 300]
+    }
+  ],
+  "connections": {
+    "开始触发": {
+      "main": [
+        [
+          {
+            "node": "准备数据",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "准备数据": {
+      "main": [
+        [
+          {
+            "node": "转换数据格式",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "转换数据格式": {
+      "main": [
+        [
+          {
+            "node": "分批处理",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "分批处理": {
+      "main": [
+        [
+          {
+            "node": "处理单批数据",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "处理单批数据": {
+      "main": [
+        [
+          {
+            "node": "记录处理日志",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "记录处理日志": {
+      "main": [
+        [
+          {
+            "node": "分批处理",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2024-12-17T10:15:00.000Z",
+  "updatedAt": "2024-12-17T10:15:00.000Z",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "description": "演示如何使用Split in Batches节点进行批量数据处理的循环操作"
+  },
+  "pinData": {},
+  "versionId": "loop-example-version-1"
+} 

@@ -1,0 +1,172 @@
+{
+  "name": "分支处理工作流",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "f1d4b3e2-8c9a-4b5d-9e8f-1234567890ab",
+      "name": "手动触发",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "用户类型",
+              "value": "VIP"
+            },
+            {
+              "name": "订单金额",
+              "value": "1500"
+            },
+            {
+              "name": "用户名",
+              "value": "张三"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a2b3c4d5-1234-5678-9abc-def123456789",
+      "name": "设置数据",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "condition1",
+              "leftValue": "={{ $json.用户类型 }}",
+              "rightValue": "VIP",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "condition2",
+              "leftValue": "={{ $json.订单金额 }}",
+              "rightValue": "1000",
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "c3d4e5f6-5678-9abc-def1-23456789abcd",
+      "name": "条件判断",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "处理方式",
+              "value": "VIP专属优惠"
+            },
+            {
+              "name": "折扣率",
+              "value": "20%"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d4e5f6g7-9abc-def1-2345-6789abcdef12",
+      "name": "VIP处理",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [900, 200]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "处理方式",
+              "value": "普通用户标准流程"
+            },
+            {
+              "name": "折扣率",
+              "value": "5%"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e5f6g7h8-def1-2345-6789-abcdef123456",
+      "name": "普通处理",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [900, 400]
+    }
+  ],
+  "connections": {
+    "手动触发": {
+      "main": [
+        [
+          {
+            "node": "设置数据",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "设置数据": {
+      "main": [
+        [
+          {
+            "node": "条件判断",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "条件判断": {
+      "main": [
+        [
+          {
+            "node": "VIP处理",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "普通处理",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2024-12-17T10:00:00.000Z",
+  "updatedAt": "2024-12-17T10:00:00.000Z",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {},
+  "pinData": {},
+  "versionId": "12345678-1234-1234-1234-123456789abc"
+} 
