@@ -22,16 +22,16 @@ mermaid: false
 这类块通常进入 `system`：
 
 ```text
-# {{MEMORY_DISPLAY_NAME}}
+# {% raw %}{{MEMORY_DISPLAY_NAME}}{% endraw %}
 
-You have a persistent, file-based memory system at `{{MEMORY_DIR}}`.
-{{DIR_EXISTS_GUIDANCE}}
+You have a persistent, file-based memory system at `{% raw %}{{MEMORY_DIR}}{% endraw %}`.
+{% raw %}{{DIR_EXISTS_GUIDANCE}}{% endraw %}
 
-{{HOW_TO_SAVE_MEMORIES_SECTION}}
-{{WHAT_NOT_TO_SAVE_SECTION}}
+{% raw %}{{HOW_TO_SAVE_MEMORIES_SECTION}}{% endraw %}
+{% raw %}{{WHAT_NOT_TO_SAVE_SECTION}}{% endraw %}
 
 ## MEMORY.md
-{{MEMORY_INDEX_CONTENT_OR_EMPTY_MESSAGE}}
+{% raw %}{{MEMORY_INDEX_CONTENT_OR_EMPTY_MESSAGE}}{% endraw %}
 ```
 
 ### 1.2 agent memory 块
@@ -39,11 +39,11 @@ You have a persistent, file-based memory system at `{{MEMORY_DIR}}`.
 ```text
 # Persistent Agent Memory
 
-{{BASE_MEMORY_POLICY}}
-{{SCOPE_NOTE}}
+{% raw %}{{BASE_MEMORY_POLICY}}{% endraw %}
+{% raw %}{{SCOPE_NOTE}}{% endraw %}
 
 ## MEMORY.md
-{{AGENT_MEMORY_INDEX}}
+{% raw %}{{AGENT_MEMORY_INDEX}}{% endraw %}
 ```
 
 ### 1.3 `messages` 开头的 context 块
@@ -51,10 +51,10 @@ You have a persistent, file-based memory system at `{{MEMORY_DIR}}`.
 ```text
 <system-reminder>
 # claudeMd
-{{DISCOVERED_CLAUDE_MD_AND_RULE_FILES}}
+{% raw %}{{DISCOVERED_CLAUDE_MD_AND_RULE_FILES}}{% endraw %}
 
 # currentDate
-{{CURRENT_DATE}}
+{% raw %}{{CURRENT_DATE}}{% endraw %}
 </system-reminder>
 ```
 
@@ -63,10 +63,10 @@ You have a persistent, file-based memory system at `{{MEMORY_DIR}}`.
 ```text
 Attachment: relevant_memories
 |
-|-- {{MEMORY_HEADER_1}}
-|   {{MEMORY_CONTENT_1}}
-|-- {{MEMORY_HEADER_2}}
-|   {{MEMORY_CONTENT_2}}
+|-- {% raw %}{{MEMORY_HEADER_1}}{% endraw %}
+|   {% raw %}{{MEMORY_CONTENT_1}}{% endraw %}
+|-- {% raw %}{{MEMORY_HEADER_2}}{% endraw %}
+|   {% raw %}{{MEMORY_CONTENT_2}}{% endraw %}
 `-- ...
 ```
 
@@ -79,7 +79,7 @@ Attachment: relevant_memories
 ```text
 # auto memory
 
-You have a persistent, file-based memory system at `{{AUTO_MEMORY_DIR}}`.
+You have a persistent, file-based memory system at `{% raw %}{{AUTO_MEMORY_DIR}}{% endraw %}`.
 This directory already exists — write to it directly with the Write tool.
 
 If the user explicitly asks you to remember something, save it immediately.
@@ -126,7 +126,7 @@ Memory: project_context.md
 ```text
 # Persistent Agent Memory
 
-You have a persistent, file-based memory system at `{{AGENT_MEMORY_DIR}}`.
+You have a persistent, file-based memory system at `{% raw %}{{AGENT_MEMORY_DIR}}{% endraw %}`.
 - Since this memory is project-scope, tailor your memories to this project.
 
 ## MEMORY.md

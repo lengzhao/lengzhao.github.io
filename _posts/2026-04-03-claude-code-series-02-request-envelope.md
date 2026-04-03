@@ -17,17 +17,17 @@ mermaid: false
 MODEL REQUEST
 |
 |-- system: string[]
-|    |-- {{SYSTEM_PROMPT_PARTS}}
-|    `-- {{APPENDED_SYSTEM_CONTEXT}}
+|    |-- {% raw %}{{SYSTEM_PROMPT_PARTS}}{% endraw %}
+|    `-- {% raw %}{{APPENDED_SYSTEM_CONTEXT}}{% endraw %}
 |
 |-- messages: Message[]
-|    |-- {{PREPENDED_USER_CONTEXT_META_MESSAGE}}
-|    |-- {{CONVERSATION_MESSAGES}}
-|    |-- {{ATTACHMENTS}}
-|    `-- {{TOOL_RESULTS}}
+|    |-- {% raw %}{{PREPENDED_USER_CONTEXT_META_MESSAGE}}{% endraw %}
+|    |-- {% raw %}{{CONVERSATION_MESSAGES}}{% endraw %}
+|    |-- {% raw %}{{ATTACHMENTS}}{% endraw %}
+|    `-- {% raw %}{{TOOL_RESULTS}}{% endraw %}
 |
 |-- tools: ToolDefinition[]
-|    `-- {{TOOL_DEFINITIONS_SIDEBAND}}
+|    `-- {% raw %}{{TOOL_DEFINITIONS_SIDEBAND}}{% endraw %}
 |
 |-- model / thinking / budget / maxTurns / querySource / ...
 |
@@ -47,10 +47,10 @@ MODEL REQUEST
 ```text
 REQUEST
 |
-|-- model: {{MAIN_LOOP_MODEL}}
-|-- thinkingConfig: {{THINKING_CONFIG}}
+|-- model: {% raw %}{{MAIN_LOOP_MODEL}}{% endraw %}
+|-- thinkingConfig: {% raw %}{{THINKING_CONFIG}}{% endraw %}
 |-- querySource: "sdk" | "repl_main_thread" | ...
-|-- maxTurns: {{MAX_TURNS}}
+|-- maxTurns: {% raw %}{{MAX_TURNS}}{% endraw %}
 |-- tools: ToolDefinition[]
 |-- system: string[]
 `-- messages: Message[]
@@ -65,10 +65,10 @@ REQUEST
   "# Doing Tasks\n- Keep working until the user's request is complete.",
   "# Actions\n- Read before editing when needed.",
   "# Using Your Tools\n- Use tools when direct evidence is needed.",
-  "# auto memory\nYou have a persistent, file-based memory system at `{{AUTO_MEMORY_DIR}}`.",
-  "# Environment\n- Primary working directory: {{CWD}}",
+  "# auto memory\nYou have a persistent, file-based memory system at `{% raw %}{{AUTO_MEMORY_DIR}}{% endraw %}`.",
+  "# Environment\n- Primary working directory: {% raw %}{{CWD}}{% endraw %}",
   "# Language\n- Default language: 中文",
-  "gitStatus: {{SHORT_GIT_STATUS}}"
+  "gitStatus: {% raw %}{{SHORT_GIT_STATUS}}{% endraw %}"
 ]
 ```
 
@@ -79,7 +79,7 @@ REQUEST
   {
     type: "user",
     isMeta: true,
-    content: "<system-reminder>\n# claudeMd\n{{RULES_AND_CONTEXT}}\n\n# currentDate\n{{CURRENT_DATE}}\n</system-reminder>"
+    content: "<system-reminder>\n# claudeMd\n{% raw %}{{RULES_AND_CONTEXT}}{% endraw %}\n\n# currentDate\n{% raw %}{{CURRENT_DATE}}{% endraw %}\n</system-reminder>"
   },
   {
     type: "user",
@@ -110,9 +110,9 @@ REQUEST
 ```text
 tools = [
   {
-    name: "{{TOOL_NAME}}",
-    description: "{{TOOL_DESCRIPTION}}",
-    input_schema: {{TOOL_INPUT_SCHEMA}}
+    name: "{% raw %}{{TOOL_NAME}}{% endraw %}",
+    description: "{% raw %}{{TOOL_DESCRIPTION}}{% endraw %}",
+    input_schema: {% raw %}{{TOOL_INPUT_SCHEMA}}{% endraw %}
   }
 ]
 ```
@@ -121,10 +121,10 @@ tools = [
 
 ```text
 messages = [
-  {{USER_CONTEXT_META_MESSAGE}},
-  Attachment({{RELEVANT_MEMORIES}}),
-  Attachment({{HOOK_CONTEXT}}),
-  Attachment({{TEAMMATE_MAILBOX}}),
+  {% raw %}{{USER_CONTEXT_META_MESSAGE}}{% endraw %},
+  Attachment({% raw %}{{RELEVANT_MEMORIES}}{% endraw %}),
+  Attachment({% raw %}{{HOOK_CONTEXT}}{% endraw %}),
+  Attachment({% raw %}{{TEAMMATE_MAILBOX}}{% endraw %}),
   ...
 ]
 ```

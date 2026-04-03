@@ -23,10 +23,10 @@ mermaid: false
 
 ```text
 system = [
-  {{FULL_MAIN_THREAD_SYSTEM_PROMPT_PARTS}},
-  {{TEAMMATE_SYSTEM_PROMPT_ADDENDUM}},
-  {{CUSTOM_AGENT_INSTRUCTIONS?}},
-  {{APPENDED_SYSTEM_PROMPT_FROM_CALLER?}}
+  {% raw %}{{FULL_MAIN_THREAD_SYSTEM_PROMPT_PARTS}}{% endraw %},
+  {% raw %}{{TEAMMATE_SYSTEM_PROMPT_ADDENDUM}}{% endraw %},
+  {% raw %}{{CUSTOM_AGENT_INSTRUCTIONS?}}{% endraw %},
+  {% raw %}{{APPENDED_SYSTEM_PROMPT_FROM_CALLER?}}{% endraw %}
 ]
 ```
 
@@ -45,11 +45,11 @@ IMPORTANT: You are running as an agent in a team.
 
 ```text
 messages = [
-  {{PREPENDED_USER_CONTEXT_META_MESSAGE}},
-  {{PREVIOUS_TEAMMATE_CONTEXT_MESSAGES?}},
-  {{TEAM_LEAD_WRAPPED_PROMPT}},
-  {{TASK_ASSIGNMENT_OR_MAILBOX_ATTACHMENTS?}},
-  {{SUBSEQUENT_TOOL_RESULTS_AND_ASSISTANT_MESSAGES}}
+  {% raw %}{{PREPENDED_USER_CONTEXT_META_MESSAGE}}{% endraw %},
+  {% raw %}{{PREVIOUS_TEAMMATE_CONTEXT_MESSAGES?}}{% endraw %},
+  {% raw %}{{TEAM_LEAD_WRAPPED_PROMPT}}{% endraw %},
+  {% raw %}{{TASK_ASSIGNMENT_OR_MAILBOX_ATTACHMENTS?}}{% endraw %},
+  {% raw %}{{SUBSEQUENT_TOOL_RESULTS_AND_ASSISTANT_MESSAGES}}{% endraw %}
 ]
 ```
 
@@ -67,7 +67,7 @@ You are Claude Code, Anthropic's official CLI for Claude.
 You are an interactive coding assistant running inside the user's project.
 
 # auto memory
-You have a persistent, file-based memory system at `{{AUTO_MEMORY_DIR}}`.
+You have a persistent, file-based memory system at `{% raw %}{{AUTO_MEMORY_DIR}}{% endraw %}`.
 
 # Agent Teammate Communication
 IMPORTANT: You are running as an agent in a team.
@@ -85,7 +85,7 @@ Focus on locating code structure and reporting findings back to the team lead.
 ```text
 <system-reminder>
 # claudeMd
-{{项目规则与用户偏好}}
+{% raw %}{{项目规则与用户偏好}}{% endraw %}
 
 # currentDate
 Today's date is 2026-04-02.
@@ -99,9 +99,9 @@ Today's date is 2026-04-02.
 如果已经运行一段时间，还可能附带：
 
 ```text
-{{之前未压缩的 teammate 历史}}
-{{mailbox 中未读消息}}
-{{当前领取中的 task 上下文}}
+{% raw %}{{之前未压缩的 teammate 历史}}{% endraw %}
+{% raw %}{{mailbox 中未读消息}}{% endraw %}
+{% raw %}{{当前领取中的 task 上下文}}{% endraw %}
 ```
 
 ---

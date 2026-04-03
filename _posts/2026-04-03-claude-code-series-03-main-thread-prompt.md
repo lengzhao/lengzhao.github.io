@@ -17,21 +17,21 @@ mermaid: false
 
 ```text
 system = [
-  {{INTRO_SECTION}},
-  {{SYSTEM_SECTION}},
-  {{DOING_TASKS_SECTION}},
-  {{ACTIONS_SECTION}},
-  {{USING_TOOLS_SECTION}},
-  {{TONE_AND_STYLE_SECTION}},
-  {{OUTPUT_EFFICIENCY_SECTION}},
-  {{SESSION_GUIDANCE_SECTION}},
-  {{MEMORY_PROMPT_BLOCK}},
-  {{ENVIRONMENT_SECTION}},
-  {{LANGUAGE_SECTION}},
-  {{OUTPUT_STYLE_SECTION}},
-  {{OPTIONAL_MCP_SECTION}},
-  {{OPTIONAL_SCRATCHPAD_SECTION}},
-  {{APPENDED_SYSTEM_CONTEXT}}
+  {% raw %}{{INTRO_SECTION}}{% endraw %},
+  {% raw %}{{SYSTEM_SECTION}}{% endraw %},
+  {% raw %}{{DOING_TASKS_SECTION}}{% endraw %},
+  {% raw %}{{ACTIONS_SECTION}}{% endraw %},
+  {% raw %}{{USING_TOOLS_SECTION}}{% endraw %},
+  {% raw %}{{TONE_AND_STYLE_SECTION}}{% endraw %},
+  {% raw %}{{OUTPUT_EFFICIENCY_SECTION}}{% endraw %},
+  {% raw %}{{SESSION_GUIDANCE_SECTION}}{% endraw %},
+  {% raw %}{{MEMORY_PROMPT_BLOCK}}{% endraw %},
+  {% raw %}{{ENVIRONMENT_SECTION}}{% endraw %},
+  {% raw %}{{LANGUAGE_SECTION}}{% endraw %},
+  {% raw %}{{OUTPUT_STYLE_SECTION}}{% endraw %},
+  {% raw %}{{OPTIONAL_MCP_SECTION}}{% endraw %},
+  {% raw %}{{OPTIONAL_SCRATCHPAD_SECTION}}{% endraw %},
+  {% raw %}{{APPENDED_SYSTEM_CONTEXT}}{% endraw %}
 ]
 ```
 
@@ -39,12 +39,12 @@ system = [
 
 ```text
 messages = [
-  {{PREPENDED_USER_CONTEXT_META_MESSAGE}},
-  {{OLDER_MESSAGES_AFTER_COMPACT_BOUNDARY}},
-  {{ATTACHMENT_MESSAGES}},
-  {{CURRENT_USER_MESSAGE}},
-  {{ASSISTANT_MESSAGES_FROM_PREVIOUS_ITERATIONS?}},
-  {{TOOL_RESULT_MESSAGES?}}
+  {% raw %}{{PREPENDED_USER_CONTEXT_META_MESSAGE}}{% endraw %},
+  {% raw %}{{OLDER_MESSAGES_AFTER_COMPACT_BOUNDARY}}{% endraw %},
+  {% raw %}{{ATTACHMENT_MESSAGES}}{% endraw %},
+  {% raw %}{{CURRENT_USER_MESSAGE}}{% endraw %},
+  {% raw %}{{ASSISTANT_MESSAGES_FROM_PREVIOUS_ITERATIONS?}}{% endraw %},
+  {% raw %}{{TOOL_RESULT_MESSAGES?}}{% endraw %}
 ]
 ```
 
@@ -53,10 +53,10 @@ messages = [
 ```text
 <system-reminder>
 # claudeMd
-{{CLAUDE_MD_AND_RULE_FILES}}
+{% raw %}{{CLAUDE_MD_AND_RULE_FILES}}{% endraw %}
 
 # currentDate
-{{CURRENT_DATE}}
+{% raw %}{{CURRENT_DATE}}{% endraw %}
 </system-reminder>
 ```
 
@@ -82,14 +82,14 @@ You are an interactive coding assistant running inside the user's project.
 - Verify your changes when practical.
 
 # auto memory
-You have a persistent, file-based memory system at `{{AUTO_MEMORY_DIR}}`.
+You have a persistent, file-based memory system at `{% raw %}{{AUTO_MEMORY_DIR}}{% endraw %}`.
 
 # Environment
-- Primary working directory: {{CWD}}
+- Primary working directory: {% raw %}{{CWD}}{% endraw %}
 - Platform: darwin
 - Shell: zsh
 
-gitStatus: {{SHORT_GIT_STATUS}}
+gitStatus: {% raw %}{{SHORT_GIT_STATUS}}{% endraw %}
 ```
 
 ### 2.2 `messages`

@@ -23,10 +23,10 @@ mermaid: false
 
 ```text
 system = [
-  {{AGENT_DEFINITION_SYSTEM_PROMPT_OR_DEFAULT_AGENT_PROMPT}},
-  {{SUBAGENT_NOTES_BLOCK}},
-  {{ENVIRONMENT_DETAILS_BLOCK}},
-  {{APPENDED_SUBAGENT_SYSTEM_CONTEXT}}
+  {% raw %}{{AGENT_DEFINITION_SYSTEM_PROMPT_OR_DEFAULT_AGENT_PROMPT}}{% endraw %},
+  {% raw %}{{SUBAGENT_NOTES_BLOCK}}{% endraw %},
+  {% raw %}{{ENVIRONMENT_DETAILS_BLOCK}}{% endraw %},
+  {% raw %}{{APPENDED_SUBAGENT_SYSTEM_CONTEXT}}{% endraw %}
 ]
 ```
 
@@ -34,11 +34,11 @@ system = [
 
 ```text
 messages = [
-  {{PREPENDED_SUBAGENT_USER_CONTEXT_META_MESSAGE}},
-  {{FORKED_PARENT_CONTEXT_MESSAGES?}},
-  {{SUBAGENT_PROMPT_MESSAGES}},
-  {{HOOK_ADDITIONAL_CONTEXT_ATTACHMENT?}},
-  {{PRELOADED_SKILL_MESSAGES?}}
+  {% raw %}{{PREPENDED_SUBAGENT_USER_CONTEXT_META_MESSAGE}}{% endraw %},
+  {% raw %}{{FORKED_PARENT_CONTEXT_MESSAGES?}}{% endraw %},
+  {% raw %}{{SUBAGENT_PROMPT_MESSAGES}}{% endraw %},
+  {% raw %}{{HOOK_ADDITIONAL_CONTEXT_ATTACHMENT?}}{% endraw %},
+  {% raw %}{{PRELOADED_SKILL_MESSAGES?}}{% endraw %}
 ]
 ```
 
@@ -46,12 +46,12 @@ messages = [
 
 ```text
 resolvedUserContext =
-  {{BASE_USER_CONTEXT}}
-  - {{CLAUDE_MD?}}
+  {% raw %}{{BASE_USER_CONTEXT}}{% endraw %}
+  - {% raw %}{{CLAUDE_MD?}}{% endraw %}
 
 resolvedSystemContext =
-  {{BASE_SYSTEM_CONTEXT}}
-  - {{GIT_STATUS?}}
+  {% raw %}{{BASE_SYSTEM_CONTEXT}}{% endraw %}
+  - {% raw %}{{GIT_STATUS?}}{% endraw %}
 ```
 
 `Explore`、`Plan` 这类只读型 Agent 往往会裁掉：
@@ -75,7 +75,7 @@ Notes:
 - Do not use a colon before tool calls.
 
 # Environment
-Working directory: {{SUBAGENT_CWD}}
+Working directory: {% raw %}{{SUBAGENT_CWD}}{% endraw %}
 Is directory a git repo: true
 Platform: darwin
 Shell: zsh
@@ -93,10 +93,10 @@ Your job is to quickly inspect the repository, find relevant files, and return a
 ```text
 userContext:
   currentDate: 2026-04-02
-  {{claudeMd 被省略}}
+  {% raw %}{{claudeMd 被省略}}{% endraw %}
 
 systemContext:
-  {{gitStatus 被省略}}
+  {% raw %}{{gitStatus 被省略}}{% endraw %}
 ```
 
 ### 2.3 `messages`

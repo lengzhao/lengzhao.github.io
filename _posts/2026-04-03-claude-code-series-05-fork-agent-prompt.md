@@ -19,11 +19,11 @@ fork agent 的重点不是高度定制，而是：
 
 ```text
 cacheSafeParams = {
-  systemPrompt: {{PARENT_RENDERED_SYSTEM_PROMPT}},
-  userContext: {{PARENT_USER_CONTEXT}},
-  systemContext: {{PARENT_SYSTEM_CONTEXT}},
-  toolUseContext: {{CLONED_PARENT_TOOL_USE_CONTEXT}},
-  forkContextMessages: {{PARENT_CONTEXT_MESSAGES}}
+  systemPrompt: {% raw %}{{PARENT_RENDERED_SYSTEM_PROMPT}}{% endraw %},
+  userContext: {% raw %}{{PARENT_USER_CONTEXT}}{% endraw %},
+  systemContext: {% raw %}{{PARENT_SYSTEM_CONTEXT}}{% endraw %},
+  toolUseContext: {% raw %}{{CLONED_PARENT_TOOL_USE_CONTEXT}}{% endraw %},
+  forkContextMessages: {% raw %}{{PARENT_CONTEXT_MESSAGES}}{% endraw %}
 }
 ```
 
@@ -31,30 +31,30 @@ cacheSafeParams = {
 
 ```text
 SYSTEM
-  {{PARENT_SYSTEM_PROMPT}}
-  {{PARENT_SYSTEM_CONTEXT}}
+  {% raw %}{{PARENT_SYSTEM_PROMPT}}{% endraw %}
+  {% raw %}{{PARENT_SYSTEM_CONTEXT}}{% endraw %}
 
 TOOLS
-  {{PARENT_OR_EXACT_TOOLS}}
+  {% raw %}{{PARENT_OR_EXACT_TOOLS}}{% endraw %}
 
 MESSAGES
-  {{PARENT_USER_CONTEXT_META_MESSAGE}}
-  {{FORK_CONTEXT_MESSAGES}}
-  {{FORK_PROMPT_MESSAGES}}
+  {% raw %}{{PARENT_USER_CONTEXT_META_MESSAGE}}{% endraw %}
+  {% raw %}{{FORK_CONTEXT_MESSAGES}}{% endraw %}
+  {% raw %}{{FORK_PROMPT_MESSAGES}}{% endraw %}
 ```
 
 可变块通常只有：
 
-- `{{FORK_PROMPT_MESSAGES}}`
-- `{{MAX_TURNS_OVERRIDE?}}`
-- `{{CALLBACKS?}}`
+- `{% raw %}{{FORK_PROMPT_MESSAGES}}{% endraw %}`
+- `{% raw %}{{MAX_TURNS_OVERRIDE?}}{% endraw %}`
+- `{% raw %}{{CALLBACKS?}}{% endraw %}`
 
 不应轻易变化的通常是：
 
-- `{{SYSTEM_PROMPT_PREFIX}}`
-- `{{USER_CONTEXT}}`
-- `{{SYSTEM_CONTEXT}}`
-- `{{TOOLS}}`
+- `{% raw %}{{SYSTEM_PROMPT_PREFIX}}{% endraw %}`
+- `{% raw %}{{USER_CONTEXT}}{% endraw %}`
+- `{% raw %}{{SYSTEM_CONTEXT}}{% endraw %}`
+- `{% raw %}{{TOOLS}}{% endraw %}`
 
 ---
 
@@ -70,13 +70,13 @@ You are Claude Code, Anthropic's official CLI for Claude.
 You are an interactive coding assistant running inside the user's project.
 
 # auto memory
-You have a persistent, file-based memory system at `{{AUTO_MEMORY_DIR}}`.
+You have a persistent, file-based memory system at `{% raw %}{{AUTO_MEMORY_DIR}}{% endraw %}`.
 
 # Environment
-- Primary working directory: {{CWD}}
+- Primary working directory: {% raw %}{{CWD}}{% endraw %}
 - Platform: darwin
 
-gitStatus: {{SHORT_GIT_STATUS}}
+gitStatus: {% raw %}{{SHORT_GIT_STATUS}}{% endraw %}
 ```
 
 这里最重要的不是字面内容，而是：
@@ -88,13 +88,13 @@ gitStatus: {{SHORT_GIT_STATUS}}
 ```text
 <system-reminder>
 # claudeMd
-{{与主线程相同的 claudeMd 内容}}
+{% raw %}{{与主线程相同的 claudeMd 内容}}{% endraw %}
 
 # currentDate
 Today's date is 2026-04-02.
 </system-reminder>
 
-{{父线程已有上下文消息}}
+{% raw %}{{父线程已有上下文消息}}{% endraw %}
 
 请根据当前会话内容，生成一个简短的阶段性总结，重点保留后续继续工作必须知道的信息。
 ```
